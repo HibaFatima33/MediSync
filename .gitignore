@@ -32,3 +32,5 @@ data/
 logs/
 '@ | Add-Content .gitignore~$*
 ~WRL*.tmp
+~$*
+~WRL*.tmp
