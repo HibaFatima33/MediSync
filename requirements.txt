@@ -1,0 +1,2 @@
+duckdb==1.4.3
+psycopg[binary]>=3.2,<4

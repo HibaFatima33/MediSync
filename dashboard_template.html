@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sales and Demand Intelligence | Hiba and Bilqees</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#ead5e7;color:#702963;font:15px Arial,sans-serif}main{max-width:1320px;margin:auto;padding:28px}h1{font-size:29px;margin:0 0 8px}h2{font-size:18px;margin:0 0 8px}p{line-height:1.55;color:#70566d}header{margin-bottom:22px}.filters{display:flex;gap:20px;flex-wrap:wrap;background:white;padding:18px;border:1px solid #d5b4ce;border-radius:10px}label{font-weight:bold;display:grid;gap:8px}select{min-width:180px;max-width:290px;padding:9px;border:1px solid #bbcbd5;border-radius:5px;font:inherit;background:white}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}.card,.chart{background:white;border:1px solid #d5b4ce;border-radius:10px;padding:20px}.card span{color:#70566d;font-size:13px}.card strong{display:block;font-size:27px;margin:12px 0}.card small{color:#70566d}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chart p{font-size:13px;margin:0 0 12px;min-height:38px}.chart svg{width:100%;height:auto;display:block}.note{font-size:13px;margin-top:20px}svg text{font-family:Arial,sans-serif;font-size:11px;fill:#70566d}svg .title{fill:#702963;font-size:12px}.legend{display:flex;gap:18px;margin-bottom:9px;font-size:12px}.dot{display:inline-block;width:10px;height:10px;margin-right:5px;background:#702963}.orange{background:#c56b99}@media(max-width:850px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}main{padding:16px}}@media print{body{background:white}.filters{display:none}.chart,.card{break-inside:avoid}.grid{display:block}.chart{margin-bottom:18px}header{margin-bottom:12px}}
+</style>
+<main><header><h1>Sales and Demand Intelligence</h1><p>Prepared by Hiba and Bilqees. Explore medicine sales and hospital demand from the three SQL results.</p></header>
+<div class="filters"><label>Period<select id="year"></select></label><label>Medicine<select id="medicine"></select></label><label>Hospital<select id="hospital"></select></label></div>
+<p class="note">Period and medicine apply to every chart. Hospital applies only to hospital measures and charts 4 to 6. Sales measures still include all pharmacies.</p>
+<section class="cards"><div class="card"><span>NET SALES</span><strong id="net"></strong><small>All pharmacies in the selected period</small></div><div class="card"><span>GROSS MARGIN</span><strong id="margin"></strong><small>Total gross profit divided by net sales</small></div><div class="card"><span>HOSPITAL FORECAST WAPE</span><strong id="wape"></strong><small>Absolute error compared with consumed packs</small></div><div class="card"><span>UNMET HOSPITAL DEMAND</span><strong id="unmet"></strong><small>Packs from the supplied unmet demand field</small></div></section>
+<section class="grid">
+<div class="chart"><h2>1 Monthly net sales</h2><p>See how sales money changes over time. USD.</p><div id="saleschart"></div></div>
+<div class="chart"><h2>2 Net sales by channel</h2><p>Compare physical pharmacies with e commerce. Hospital pharmacy is a pharmacy type, not a third channel.</p><div id="channelchart"></div></div>
+<div class="chart"><h2>3 Medicines with the most packs sold</h2><p>Top 10 by pack quantity. This ranking is separate from sales money.</p><div id="medicinechart"></div></div>
+<div class="chart"><h2>4 Hospital forecast and actual use</h2><p>Compare monthly forecast packs with consumed packs. A forecast gap is not automatically unmet demand.</p><div class="legend"><span><i class="dot"></i>Forecast</span><span><i class="dot orange"></i>Consumed</span></div><div id="forecastchart"></div></div>
+<div class="chart"><h2>5 Unmet demand by hospital</h2><p>Compare recorded unmet packs. No lost revenue amount is assumed.</p><div id="unmetchart"></div></div>
+<div class="chart"><h2>6 Hospital pharmacy sales and hospital use</h2><p>Compare matching monthly groups side by side. Never add these numbers as total demand. The chart shows their different scales.</p><div id="comparechart"></div></div>
+</section><p class="note" id="stamp"></p><p class="note">This is an offline snapshot of the SQL results. Rerun make_dashboard.py after a successful pipeline run, then reopen or reload this file. Missing comparison data stays unavailable. Use your browser print option to save a PDF or take screenshots.</p></main>
+<script>
+const DATA=__DATA__;
+const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
+const fmt=n=>n===null||!Number.isFinite(n)?'Not available':new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+function option(select,value,label){const x=document.createElement('option');x.value=value;x.textContent=label;select.appendChild(x)}
+option($('year'),'all','All years');[...new Set([...DATA.sales,...DATA.hospital].map(r=>r[0].slice(0,4)))].sort().forEach(y=>option($('year'),y,y));
+option($('medicine'),'all','All medicines');const medicines=new Map(DATA.sales.map(r=>[r[1],r[2]]));[...medicines].sort((a,b)=>a[1].localeCompare(b[1])).forEach(([id,name])=>option($('medicine'),id,name+' ('+id+')'));
+option($('hospital'),'all','All hospitals');[...new Map(DATA.hospital.map(r=>[r[2],r[3]])).entries()].sort().forEach(([id,name])=>option($('hospital'),id,id+' '+name));
+if([...$('year').options].some(x=>x.value==='2025'))$('year').value='2025';
+function el(tag,attrs={},text){const x=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))x.setAttribute(k,v);if(text!==undefined)x.textContent=text;return x}
+function svg(id,height=290){$(id).replaceChildren();const s=el('svg',{viewBox:`0 0 600 ${height}`,role:'img','aria-label':$(id).parentElement.querySelector('h2').textContent});$(id).appendChild(s);return s}
+function sum(rows,index){return rows.reduce((a,r)=>a+Number(r[index]||0),0)}
+function group(rows,key,value){const m=new Map();rows.forEach(r=>m.set(key(r),(m.get(key(r))||0)+Number(value(r)||0)));return [...m]}
+function bars(id,rows,unit='packs'){
+ const s=svg(id,Math.max(180,rows.length*30+45)),w=600,left=190,right=85,range=w-left-right;
+ if(!rows.length){s.appendChild(el('text',{x:20,y:35},'No matching records'));return}
+ const max=Math.max(1,...rows.map(r=>Math.abs(r[1]||0)));
+ rows.forEach(([name,value],i)=>{const y=20+i*30,label=name.length>26?name.slice(0,25)+'â€¦':name;
+ const text=el('text',{x:left-10,y:y+15,'text-anchor':'end'},label);text.appendChild(el('title',{},name));s.appendChild(text);
+ if(value===null){s.appendChild(el('text',{x:left+4,y:y+15},'Not available'));return}
+ const rect=el('rect',{x:left,y,width:Math.max(0,Math.abs(value)/max*range),height:21,rx:3,fill:i===0?'#702963':'#b780aa'});
+ rect.appendChild(el('title',{},name+': '+(unit==='USD'?money(value):fmt(value)+' packs')));s.appendChild(rect);
+ s.appendChild(el('text',{x:left+Math.abs(value)/max*range+7,y:y+15},unit==='USD'?money(value):fmt(value)));
+ });
+}
+function lines(id,labels,series,unit){
+ const s=svg(id,290),left=62,right=18,top=16,bottom=51,width=600-left-right,height=290-top-bottom;
+ if(!labels.length){s.appendChild(el('text',{x:20,y:35},'No matching records'));return}
+ const max=Math.max(1,...series.flatMap(t=>t.values));
+ for(let i=0;i<=4;i++){const y=top+height-i*height/4;s.appendChild(el('line',{x1:left,x2:600-right,y1:y,y2:y,stroke:'#eadbe6'}));s.appendChild(el('text',{x:left-7,y:y+4,'text-anchor':'end'},fmt(max*i/4)))}
+ const x=i=>left+(labels.length===1?width/2:i*width/(labels.length-1));
+ labels.forEach((label,i)=>{if(i%Math.max(1,Math.ceil(labels.length/7))===0||i===labels.length-1)s.appendChild(el('text',{x:x(i),y:top+height+23,'text-anchor':'middle'},label))});
+ series.forEach(t=>{s.appendChild(el('polyline',{points:t.values.map((v,i)=>`${x(i)},${top+height-v/max*height}`).join(' '),fill:'none',stroke:t.color,'stroke-width':2.5}));t.values.forEach((v,i)=>{const c=el('circle',{cx:x(i),cy:top+height-v/max*height,r:3,fill:t.color});c.appendChild(el('title',{},labels[i]+' '+t.name+': '+(unit==='USD'?money(v):fmt(v)+' packs')));s.appendChild(c)})});
+}
+function update(){
+ const y=$('year').value,m=$('medicine').value,h=$('hospital').value;
+ const base=r=>(y==='all'||r[0].startsWith(y))&&(m==='all'||r[1]===m);
+ const sales=DATA.sales.filter(base),hospital=DATA.hospital.filter(r=>base(r)&&(h==='all'||r[2]===h));
+ const comparison=DATA.comparison.filter(r=>base(r)&&(h==='all'||r[2]===h));
+ const net=sum(sales,4),profit=sum(sales,6),actual=sum(hospital,5),error=hospital.reduce((a,r)=>a+Math.abs(r[4]-r[5]),0);
+ $('net').textContent=sales.length?money(net):'Not available';$('margin').textContent=sales.length&&net? (100*profit/net).toFixed(1)+'%':'Not available';
+ $('wape').textContent=actual?(100*error/actual).toFixed(1)+'%':'Not available';$('unmet').textContent=hospital.length?fmt(sum(hospital,6))+' packs':'Not available';
+ const monthly=group(sales,r=>r[0],r=>r[4]).sort((a,b)=>a[0].localeCompare(b[0]));
+ lines('saleschart',monthly.map(r=>r[0]),[{name:'Net sales',values:monthly.map(r=>r[1]),color:'#702963'}],'USD');
+ bars('channelchart',group(sales,r=>r[3],r=>r[4]).sort((a,b)=>b[1]-a[1]),'USD');
+ bars('medicinechart',group(sales,r=>r[2],r=>r[5]).sort((a,b)=>b[1]-a[1]).slice(0,10));
+ const months=[...new Set(hospital.map(r=>r[0]))].sort();
+ const forecasts=new Map(group(hospital,r=>r[0],r=>r[4])),consumed=new Map(group(hospital,r=>r[0],r=>r[5]));
+ lines('forecastchart',months,[{name:'Forecast',values:months.map(k=>forecasts.get(k)||0),color:'#702963'},{name:'Consumed',values:months.map(k=>consumed.get(k)||0),color:'#c56b99'}],'packs');
+ bars('unmetchart',group(hospital,r=>r[2],r=>r[6]).sort((a,b)=>b[1]-a[1]));
+ const sold=comparison.filter(r=>r[3]!==null),used=comparison.filter(r=>r[4]!==null);
+ bars('comparechart',comparison.length?[['Hospital pharmacy sales',sold.length?sum(sold,3):null],['Hospital consumption',used.length?sum(used,4):null]]:[]);
+ $('stamp').textContent='Built from query results on '+new Date(DATA.created).toLocaleString()+'. Selected period: '+(y==='all'?'all years':y)+'. Hover over bars or points for values.';
+}
+['year','medicine','hospital'].forEach(id=>$(id).addEventListener('change',update));update();
+</script></html>
+
