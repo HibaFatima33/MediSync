@@ -1,0 +1,12 @@
+{
+  "local_full_data": "Passed with 500000 sales and 27216 demand rows",
+  "repeat_full_load": "Passed without duplicate facts",
+  "relationships": "All 11 passed; no unresolved fact keys on supplied data",
+  "sql": "All three queries executed and reconciled to known source totals",
+  "regression_tests": "Passed: 5 core tests, followed by 2 tests of the final Type 1 correction and repeat-load logic.",
+  "postgres": "Adapter prepared. Existing local server requires a password; connection and staging not yet verified.",
+  "airflow": "DAG syntax checked. Not run; WSL access unavailable in this session.",
+  "bi_and_generator": "Not part of this first code package.",
+  "http_api": "Passed on a small fixture: health, ingest, load and all three queries",
+  "final_full_run": "Final code loaded all 500000 sales and 27216 demand records and executed all three SQL files successfully."
+}

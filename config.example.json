@@ -1,0 +1,8 @@
+{
+  "source_folder": "C:/Users/Hp/Documents/IDA'26/Pharma.Supply.Chain.Dataset/Pharma.Supply.Chain.Dataset",
+  "work_folder": "data",
+  "results_folder": "results",
+  "postgres_dsn": "",
+  "baseline_date": "2023-01-01",
+  "change_effective_date": null
+}
