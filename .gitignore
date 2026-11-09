@@ -30,4 +30,5 @@ data/
 *.duckdb.wal
 *.log
 logs/
-'@ | Add-Content .gitignore
+'@ | Add-Content .gitignore~$*
+~WRL*.tmp
