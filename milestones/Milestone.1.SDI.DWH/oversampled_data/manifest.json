@@ -1,0 +1,239 @@
+{
+  "format_version": 1,
+  "scope": "SDI medicine master, pharmacy sales and hospital demand",
+  "strategy": "Extend the original records with January and February 2026 synthetic records using existing templates.",
+  "datasets": [
+    {
+      "filename": "01_master_data.csv",
+      "rows": 63,
+      "original_rows": 63,
+      "synthetic_rows": 0,
+      "columns": [
+        "MedicineID",
+        "InternalSKU",
+        "GTIN14",
+        "GenericName",
+        "FictionalBrandName",
+        "DiseaseCategory",
+        "ICD10Category",
+        "ATCCode",
+        "TherapeuticClass",
+        "DosageForm",
+        "Strength",
+        "RouteOfAdministration",
+        "PackSize",
+        "BaseUnitOfMeasure",
+        "PrescriptionClass",
+        "ControlledMedicineFlag",
+        "ColdChainFlag",
+        "StorageMinTempC",
+        "StorageMaxTempC",
+        "MaxHumidityPct",
+        "ShelfLifeMonths",
+        "MinimumRemainingShelfLifeDays",
+        "PrimarySupplierID",
+        "PrimaryPlantID",
+        "ManufacturingLeadTimeDays",
+        "StandardBatchSizePacks",
+        "SafetyStockDays",
+        "ReorderReviewCycleDays",
+        "UnitManufacturingCostUSD",
+        "WholesalePriceUSD",
+        "RecommendedRetailPriceUSD",
+        "ProductStatus",
+        "EffectiveFromDate",
+        "SourceSystem"
+      ],
+      "logical_sha256": "c914db66716b153674e02ba7da43f5d2c281f8b6dd3efc9525d77c650f253e8d",
+      "parts": [
+        {
+          "path": "01_master_data.csv",
+          "rows": 63,
+          "sha256": "15961c1534750367f2293160df051a5ac2852d28e100ef668982c84a1e43446c",
+          "bytes": 17379
+        }
+      ]
+    },
+    {
+      "filename": "05_pharmacy_sales_data.csv",
+      "rows": 502000,
+      "original_rows": 500000,
+      "synthetic_rows": 2000,
+      "columns": [
+        "SalesTransactionID",
+        "SalesDate",
+        "SalesTimestampUTC",
+        "SalesChannel",
+        "PharmacyID",
+        "PharmacyGLN",
+        "PharmacyName",
+        "PharmacyType",
+        "HospitalID",
+        "PharmacyCity",
+        "PharmacyState",
+        "CountryCode",
+        "PharmacyOrderID",
+        "PharmacyDeliveryID",
+        "PharmacyDeliveryDate",
+        "DeliveryQuantityPacks",
+        "DeliveryOTIFFlag",
+        "WarehouseLotID",
+        "SourceWarehouseID",
+        "ProductionBatchID",
+        "MedicineID",
+        "GTIN14",
+        "DiseaseCategory",
+        "GenericName",
+        "BatchExpiryDate",
+        "DaysToExpiryAtSale",
+        "QuantitySoldPacks",
+        "UnitRetailPriceUSD",
+        "GrossSalesAmountUSD",
+        "DiscountAmountUSD",
+        "NetSalesAmountUSD",
+        "SalesTaxUSD",
+        "CostOfGoodsSoldUSD",
+        "GrossMarginUSD",
+        "PromotionCode",
+        "PrescriptionRequiredFlag",
+        "PrescriptionID",
+        "CustomerSegment",
+        "PayerType",
+        "PaymentMethod",
+        "EcommerceDeliveryStatus",
+        "ReturnFlag",
+        "ReturnedQuantityPacks",
+        "SaleStatus",
+        "SourceSystem"
+      ],
+      "logical_sha256": "75bd46ef605ceef973ec4fef08667ded9db68120a0b92dcd501ce29ea0d26eb2",
+      "parts": [
+        {
+          "path": "sales/part-001.csv",
+          "rows": 50000,
+          "sha256": "90545ad526f3b5ec2720f38ccee93b169c2459bab62a294aa7d36754aa7d0be4",
+          "bytes": 21896853
+        },
+        {
+          "path": "sales/part-002.csv",
+          "rows": 50000,
+          "sha256": "406fe71206e6ba23c10e2df3770f91a4aaf53f3240e9f36d7673b16ea13be1da",
+          "bytes": 21893562
+        },
+        {
+          "path": "sales/part-003.csv",
+          "rows": 50000,
+          "sha256": "0623bf781b45b79a98135e0db2a0e8d1c321ccd363fd462f23d48362982b7ce4",
+          "bytes": 21899175
+        },
+        {
+          "path": "sales/part-004.csv",
+          "rows": 50000,
+          "sha256": "ccbc27224a7c969f3373d39e1c4eee63832d7198acb5deda0c25f76245c609a9",
+          "bytes": 21922807
+        },
+        {
+          "path": "sales/part-005.csv",
+          "rows": 50000,
+          "sha256": "b6e46025b92f0d553fd0b4a50d7b546cfbf3fd3a59f2bf8e1064676ab2ab39d9",
+          "bytes": 21927605
+        },
+        {
+          "path": "sales/part-006.csv",
+          "rows": 50000,
+          "sha256": "da83acce6c58d64a7442a396b9859989f27b26e0463bc4a96e1e75dc3e54fb29",
+          "bytes": 21924669
+        },
+        {
+          "path": "sales/part-007.csv",
+          "rows": 50000,
+          "sha256": "93573f35c56e083c41b1e57eb85b076291f9f75065cfe7f2da0a7b9524729ef7",
+          "bytes": 21914555
+        },
+        {
+          "path": "sales/part-008.csv",
+          "rows": 50000,
+          "sha256": "26f3977e64b762fa19a8509e51c8918158c0b7b738f94cb336631cb737967986",
+          "bytes": 21913753
+        },
+        {
+          "path": "sales/part-009.csv",
+          "rows": 50000,
+          "sha256": "fdd291706774f0cfb13f2d78cef4e79882af2ea547899e9a9ab9796543bd9382",
+          "bytes": 21913451
+        },
+        {
+          "path": "sales/part-010.csv",
+          "rows": 50000,
+          "sha256": "96f4ad32a5f2995d041b92af6331ce184b4dc8dc3f210cf3b1c4c897bfed8b69",
+          "bytes": 21909070
+        },
+        {
+          "path": "sales/part-011.csv",
+          "rows": 2000,
+          "sha256": "f44076b8ca87e068335bfe4943fa46582b4faba9ad02fa8b459128343a6d4fca",
+          "bytes": 950407
+        }
+      ]
+    },
+    {
+      "filename": "06_hospital_demand_data.csv",
+      "rows": 28728,
+      "original_rows": 27216,
+      "synthetic_rows": 1512,
+      "columns": [
+        "HospitalDemandRecordID",
+        "DemandMonth",
+        "HospitalID",
+        "HospitalGLN",
+        "HospitalName",
+        "HospitalType",
+        "HospitalPharmacyID",
+        "City",
+        "State",
+        "CountryCode",
+        "LicensedBeds",
+        "ICUBeds",
+        "AverageOccupancyRatePct",
+        "TraumaLevel",
+        "CatchmentPopulation",
+        "MedicineID",
+        "GTIN14",
+        "GenericName",
+        "DiseaseCategory",
+        "ICD10Category",
+        "EstimatedDiseaseCases",
+        "DiseaseRelatedAdmissions",
+        "OutpatientEncounters",
+        "ForecastDemandPacks",
+        "RequestedQuantityPacks",
+        "ApprovedQuantityPacks",
+        "ReceivedQuantityPacks",
+        "EmergencyRequestQuantityPacks",
+        "OpeningStockPacks",
+        "DispensedQuantityPacks",
+        "ConsumedQuantityPacks",
+        "WastageQuantityPacks",
+        "ClosingStockPacks",
+        "UnfulfilledDemandPacks",
+        "StockoutDays",
+        "ServiceLevelPct",
+        "MedicationRequestStatus",
+        "FormularyStatus",
+        "AverageLeadTimeDays",
+        "DemandTrendIndex",
+        "SourceSystem"
+      ],
+      "logical_sha256": "7748d030050b30c19003f396728ff65f0c449006bfe321ee856d00773cc8872c",
+      "parts": [
+        {
+          "path": "06_hospital_demand_data.csv",
+          "rows": 28728,
+          "sha256": "de6f6cc43650718aec3ce237dc47589155670f794094fdb076e62965fcff8644",
+          "bytes": 9231666
+        }
+      ]
+    }
+  ],
+  "synthetic_source_system": "SYNTHETIC_PHASE1_DEMO"
+}

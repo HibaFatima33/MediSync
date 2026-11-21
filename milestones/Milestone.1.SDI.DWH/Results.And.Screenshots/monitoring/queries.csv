@@ -1,0 +1,4 @@
+﻿Query,Milliseconds,ResultRows,Status,MeasuredAt
+01_sales_by_medicine_month_channel_city,874.242,28618,Success,2026-11-09T23:33:00+05:00
+02_hospital_forecast_consumption,665.248,28728,Success,2026-11-09T23:33:00+05:00
+03_sales_and_demand_side_by_side,496.253,28728,Success,2026-11-09T23:33:00+05:00

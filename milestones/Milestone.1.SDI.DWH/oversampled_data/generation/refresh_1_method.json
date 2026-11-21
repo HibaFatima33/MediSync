@@ -1,0 +1,19 @@
+{
+  "refresh": 1,
+  "period": "2026-01",
+  "new_sales": 1000,
+  "new_demand": 756,
+  "new_medicines": 0,
+  "seed": 202601,
+  "method": "Template-based synthetic records with new IDs and dates. Existing records are retained.",
+  "assumptions": [
+    "Medicine definitions stay unchanged.",
+    "1000 sales were chosen for a small visible classroom refresh.",
+    "One monthly demand row is generated for every existing hospital and medicine pair.",
+    "Sales discount is 5 percent.",
+    "Sales tax is 6 percent of net sales.",
+    "Previous hospital closing stock becomes the next opening stock.",
+    "Service level and stockout days use demonstration rules.",
+    "Hospital context and upstream trace references are reused from templates. Manufacturing and IoT events are not generated."
+  ]
+}

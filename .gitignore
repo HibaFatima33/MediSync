@@ -1,34 +1,15 @@
 .venv/
-__pycache__/
-data/
-results/
-*.duckdb*
-*.lock
-config.json
-@'
-
-# Private settings
-config.json
-.env
-.env.*
-!config.example.json
-*config*backup*
-*.key
-*.pem
-
-
-# Installed packages and cache
-.venv/
-venv/
-__pycache__/
+Project.Data.And.Results/
+**/__pycache__/
 *.pyc
 .pytest_cache/
-
-# Local databases and logs
-data/
-*.duckdb
-*.duckdb.wal
-*.log
+**/config.json
+.env
+.env.*
+*.duckdb*
 logs/
-'@ | Add-Content .gitignore~$*
+*.log
+~$*
 ~WRL*.tmp
+**/docs/archive/
+runtime/

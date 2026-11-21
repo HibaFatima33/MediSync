@@ -1,0 +1,79 @@
+{
+  "table_counts": {
+    "DimMedicine": 64,
+    "DimPharmacy": 61,
+    "DimHospital": 13,
+    "DimLocation": 19,
+    "DimSalesProfile": 1948,
+    "DimDemandStatus": 7,
+    "DimDate": 2193,
+    "FactPharmacySales": 502000,
+    "FactHospitalDemand": 28728
+  },
+  "unknown_fact_rows": {
+    "FactPharmacySales": 0,
+    "FactHospitalDemand": 0
+  },
+  "foreign_key_checks": 11,
+  "location_conflicts": [
+    {
+      "HospitalID": "HOSP005",
+      "HospitalCity": "Chicago",
+      "HospitalState": "IL",
+      "PharmacyCity": "Hartford",
+      "PharmacyState": "CT"
+    },
+    {
+      "HospitalID": "HOSP008",
+      "HospitalCity": "Houston",
+      "HospitalState": "TX",
+      "PharmacyCity": "Columbus",
+      "PharmacyState": "OH"
+    },
+    {
+      "HospitalID": "HOSP012",
+      "HospitalCity": "Miami",
+      "HospitalState": "FL",
+      "PharmacyCity": "Los Angeles",
+      "PharmacyState": "CA"
+    },
+    {
+      "HospitalID": "HOSP007",
+      "HospitalCity": "Dallas",
+      "HospitalState": "TX",
+      "PharmacyCity": "Detroit",
+      "PharmacyState": "MI"
+    },
+    {
+      "HospitalID": "HOSP010",
+      "HospitalCity": "Las Vegas",
+      "HospitalState": "NV",
+      "PharmacyCity": "Houston",
+      "PharmacyState": "TX"
+    },
+    {
+      "HospitalID": "HOSP011",
+      "HospitalCity": "Atlanta",
+      "HospitalState": "GA",
+      "PharmacyCity": "Denver",
+      "PharmacyState": "CO"
+    },
+    {
+      "HospitalID": "HOSP006",
+      "HospitalCity": "Detroit",
+      "HospitalState": "MI",
+      "PharmacyCity": "Chicago",
+      "PharmacyState": "IL"
+    },
+    {
+      "HospitalID": "HOSP009",
+      "HospitalCity": "Los Angeles",
+      "HospitalState": "CA",
+      "PharmacyCity": "Dallas",
+      "PharmacyState": "TX"
+    }
+  ],
+  "note": "Dimension counts include one Unknown row. Region is omitted. Band cutoffs are project assumptions.",
+  "staging_mode": "postgres",
+  "batch": "20261109T181834_407d1b82"
+}

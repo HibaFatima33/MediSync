@@ -1,0 +1,26 @@
+YearMonth,MedicineID,GenericName,SalesChannel,City,State,SoldPacks,ReturnedPacks,NetSalesUSD,GrossProfitUSD,GrossMarginPct
+2023-01,MED004,Empagliflozin,Physical Pharmacy,New York,NY,1,0,18.22,4.42,24.26
+2023-01,MED049,Duloxetine,Physical Pharmacy,Hartford,CT,1,0,8.98,2.18,24.28
+2023-01,MED049,Duloxetine,Ecommerce,Boston,MA,1,0,8.98,2.18,24.28
+2023-02,MED009,Semaglutide,Physical Pharmacy,Hartford,CT,32,0,3848.43,904.43,23.5
+2023-02,MED009,Semaglutide,Physical Pharmacy,Boston,MA,21,0,2519.89,587.89,23.33
+2023-02,MED022,Budesonide/Formoterol,Physical Pharmacy,Boston,MA,29,0,801.10,192.10,23.98
+2023-02,MED009,Semaglutide,Ecommerce,Hartford,CT,6,0,728.64,176.64,24.24
+2023-02,MED009,Semaglutide,Ecommerce,Boston,MA,5,0,588.99,128.99,21.9
+2023-02,MED008,Insulin Aspart,Physical Pharmacy,Boston,MA,12,0,582.17,138.17,23.73
+2023-02,MED022,Budesonide/Formoterol,Physical Pharmacy,Hartford,CT,18,0,496.18,118.18,23.82
+2023-02,MED022,Budesonide/Formoterol,Physical Pharmacy,New York,NY,16,0,441.30,105.30,23.86
+2023-02,MED004,Empagliflozin,Physical Pharmacy,New York,NY,24,0,428.18,96.98,22.65
+2023-02,MED023,Tiotropium,Physical Pharmacy,San Diego,CA,12,0,340.36,76.36,22.44
+2023-02,MED053,Levetiracetam,Physical Pharmacy,Boston,MA,31,0,320.70,72.70,22.67
+2023-02,MED023,Tiotropium,Physical Pharmacy,Detroit,MI,11,1,319.44,77.44,24.24
+2023-02,MED049,Duloxetine,Physical Pharmacy,Dallas,TX,35,0,312.68,74.68,23.88
+2023-02,MED017,Clopidogrel,Physical Pharmacy,Los Angeles,CA,44,0,310.79,73.19,23.55
+2023-02,MED004,Empagliflozin,Physical Pharmacy,Denver,CO,17,0,306.46,71.86,23.45
+2023-02,MED049,Duloxetine,Physical Pharmacy,Chicago,IL,33,0,292.74,68.34,23.34
+2023-02,MED004,Empagliflozin,Physical Pharmacy,Houston,TX,16,0,288.79,67.99,23.54
+2023-02,MED019,Salbutamol,Physical Pharmacy,Chicago,IL,26,0,284.66,63.66,22.36
+2023-02,MED023,Tiotropium,Physical Pharmacy,Columbus,OH,10,0,284.60,64.60,22.7
+2023-02,MED022,Budesonide/Formoterol,Ecommerce,Boston,MA,9,0,249.48,60.48,24.24
+2023-02,MED049,Duloxetine,Physical Pharmacy,Houston,TX,26,0,227.81,51.01,22.39
+2023-02,MED023,Tiotropium,Physical Pharmacy,Atlanta,GA,8,0,225.35,49.35,21.9

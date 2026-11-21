@@ -1,0 +1,8 @@
+{
+  "source_folder": "Project.Data.And.Results/data/demo_source",
+  "work_folder": "Project.Data.And.Results/data",
+  "results_folder": "Project.Data.And.Results/results",
+  "postgres_dsn": "",
+  "baseline_date": "2023-01-01",
+  "change_effective_date": null
+}
