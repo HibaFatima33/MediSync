@@ -1,0 +1,10 @@
+﻿TableName,RowCount,TableType,MeasuredAt
+DimDate,2193,Dimension,2026-11-09T23:33:00+05:00
+DimDemandStatus,7,Dimension,2026-11-09T23:33:00+05:00
+DimHospital,13,Dimension,2026-11-09T23:33:00+05:00
+DimLocation,19,Dimension,2026-11-09T23:33:00+05:00
+DimMedicine,64,Dimension,2026-11-09T23:33:00+05:00
+DimPharmacy,61,Dimension,2026-11-09T23:33:00+05:00
+DimSalesProfile,1948,Dimension,2026-11-09T23:33:00+05:00
+FactHospitalDemand,28728,Fact,2026-11-09T23:33:00+05:00
+FactPharmacySales,502000,Fact,2026-11-09T23:33:00+05:00

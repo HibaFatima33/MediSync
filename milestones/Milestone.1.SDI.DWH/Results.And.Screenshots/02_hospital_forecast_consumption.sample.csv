@@ -1,0 +1,26 @@
+YearMonth,HospitalID,HospitalName,MedicineID,GenericName,ForecastPacks,ActualConsumedPacks,SignedForecastErrorPacks,UnmetPacks,RequestedPacks,ReceivedPacks,WAPEPercent
+2023-01,HOSP001,University Medical Center,MED001,Metformin,226,291,-65,0,307,282,22.34
+2023-01,HOSP001,University Medical Center,MED002,Gliclazide MR,215,246,-31,0,256,247,12.6
+2023-01,HOSP001,University Medical Center,MED003,Sitagliptin,243,242,1,0,268,248,0.41
+2023-01,HOSP001,University Medical Center,MED004,Empagliflozin,348,373,-25,0,387,319,6.7
+2023-01,HOSP001,University Medical Center,MED005,Dapagliflozin,241,271,-30,0,293,286,11.07
+2023-01,HOSP001,University Medical Center,MED006,Glimepiride,308,337,-29,0,397,377,8.61
+2023-01,HOSP001,University Medical Center,MED007,Insulin Glargine,339,348,-9,0,356,336,2.59
+2023-01,HOSP001,University Medical Center,MED008,Insulin Aspart,358,377,-19,0,427,392,5.04
+2023-01,HOSP001,University Medical Center,MED009,Semaglutide,211,202,9,0,237,217,4.46
+2023-01,HOSP001,University Medical Center,MED010,Amlodipine,288,282,6,0,322,293,2.13
+2023-01,HOSP001,University Medical Center,MED011,Losartan,289,310,-21,0,375,364,6.77
+2023-01,HOSP001,University Medical Center,MED012,Valsartan,383,346,37,0,429,420,10.69
+2023-01,HOSP001,University Medical Center,MED013,Lisinopril,367,392,-25,0,386,361,6.38
+2023-01,HOSP001,University Medical Center,MED014,Bisoprolol,396,385,11,0,419,399,2.86
+2023-01,HOSP001,University Medical Center,MED015,Atorvastatin,421,392,29,0,478,442,7.4
+2023-01,HOSP001,University Medical Center,MED016,Rosuvastatin,448,560,-112,0,586,523,20.0
+2023-01,HOSP001,University Medical Center,MED017,Clopidogrel,392,444,-52,0,538,515,11.71
+2023-01,HOSP001,University Medical Center,MED018,Hydrochlorothiazide,311,383,-72,0,381,355,18.8
+2023-01,HOSP001,University Medical Center,MED019,Salbutamol,242,221,21,0,271,266,9.5
+2023-01,HOSP001,University Medical Center,MED020,Budesonide,285,311,-26,0,366,350,8.36
+2023-01,HOSP001,University Medical Center,MED021,Formoterol,329,399,-70,0,445,399,17.54
+2023-01,HOSP001,University Medical Center,MED022,Budesonide/Formoterol,301,295,6,0,331,309,2.03
+2023-01,HOSP001,University Medical Center,MED023,Tiotropium,342,348,-6,0,359,326,1.72
+2023-01,HOSP001,University Medical Center,MED024,Montelukast,384,396,-12,0,411,384,3.03
+2023-01,HOSP001,University Medical Center,MED025,Fluticasone Propionate,433,437,-4,0,466,444,0.92

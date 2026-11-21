@@ -1,0 +1,15 @@
+.venv/
+Project.Data.And.Results/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+**/config.json
+.env
+.env.*
+*.duckdb*
+logs/
+*.log
+~$*
+~WRL*.tmp
+**/docs/archive/
+runtime/

@@ -1,0 +1,4 @@
+﻿Batch,Source,RowsProcessed,SnapshotSeconds,StagingSeconds,Mode,MeasuredAt
+20261109T181834_407d1b82,master,63,0.042,0.035,postgres,2026-11-09T23:33:00+05:00
+20261109T181834_407d1b82,sales,502000,15.338,29.867,postgres,2026-11-09T23:33:00+05:00
+20261109T181834_407d1b82,demand,28728,0.56,0.804,postgres,2026-11-09T23:33:00+05:00
