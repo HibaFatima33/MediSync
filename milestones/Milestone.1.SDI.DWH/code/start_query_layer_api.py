@@ -52,5 +52,10 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__=="__main__":
-    print("Local API at http://127.0.0.1:8000. Press Ctrl+C to stop.")
-    HTTPServer(("127.0.0.1",8000),Handler).serve_forever()
+    import argparse
+    parser=argparse.ArgumentParser(description="Milestone 1 query-layer API")
+    parser.add_argument("--host",default="127.0.0.1")
+    parser.add_argument("--port",type=int,default=8765)
+    args=parser.parse_args()
+    print(f"M1 API at http://{args.host}:{args.port}. Press Ctrl+C to stop.")
+    HTTPServer((args.host,args.port),Handler).serve_forever()

@@ -17,15 +17,25 @@ def run_queries(cfg):
     with lock(cfg), duckdb.connect(str(cfg["work_folder"] / "sales_demand.duckdb"),read_only=True) as con:
         for path in sorted(SQL_DIR.glob("*.sql")):
             start=time.perf_counter()
-            result=con.execute(path.read_text(encoding="utf-8"))
-            headers=[r[0] for r in result.description]
+            from monitoring_events import record_event
             out=cfg["results_folder"]/(path.stem+".csv")
+            temporary=out.with_suffix(".csv.part")
             rows=0
-            with out.open("w",encoding="utf-8-sig",newline="") as handle:
-                writer=csv.writer(handle);writer.writerow(headers)
-                while chunk:=result.fetchmany(10000):
-                    writer.writerows(chunk);rows+=len(chunk)
-            metrics.append(dict(query=path.name,rows=rows,seconds=round(time.perf_counter()-start,4),success=True))
+            try:
+                result=con.execute(path.read_text(encoding="utf-8"))
+                headers=[r[0] for r in result.description]
+                with temporary.open("w",encoding="utf-8-sig",newline="") as handle:
+                    writer=csv.writer(handle);writer.writerow(headers)
+                    while chunk:=result.fetchmany(10000):
+                        writer.writerows(chunk);rows+=len(chunk)
+                temporary.replace(out)
+            except Exception as exc:
+                temporary.unlink(missing_ok=True)
+                record_event(cfg,"query",False,time.perf_counter()-start,query=path.name,origin="pipeline",error_type=type(exc).__name__)
+                raise
+            elapsed=time.perf_counter()-start
+            record_event(cfg,"query",True,elapsed,query=path.name,origin="pipeline",rows=rows)
+            metrics.append(dict(query=path.name,rows=rows,seconds=round(elapsed,4),success=True))
         counts=con.execute("SELECT count(*) FROM LoadLog").fetchone()[0]
     (cfg["results_folder"]/"query_metrics.json").write_text(json.dumps(metrics,indent=2),encoding="utf-8")
     return dict(queries=metrics,successful_loads=counts)

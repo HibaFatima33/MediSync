@@ -323,6 +323,27 @@ def export_monitoring():
         storage_rows
     )
 
+    # Attempt history covers actual pipeline executions since logging was installed.
+    # The timing probes above are not counted as pipeline question executions.
+    from monitoring_events import summaries
+    batch_events, query_events, batch_stats, query_stats = summaries(cfg)
+    save_csv(output,"batch_health.csv",
+             ["AttemptedRuns","SuccessfulRuns","FailedRuns","SuccessRatePct","Scope","MeasuredAt"],
+             [[*batch_stats[:3],batch_stats[3],"PostgreSQL ingestion attempts since logging was installed",measured_at]])
+    daily={}
+    for event in query_events:
+        key=(event["at"][:10],event.get("query","Unknown"))
+        daily.setdefault(key,[]).append(event)
+    rows=[]
+    for (day,name),events in sorted(daily.items()):
+        n=len(events);failed=sum(not e["success"] for e in events)
+        rows.append([day,name,n,n-failed,failed,round(100*failed/n,2),measured_at])
+    save_csv(output,"query_activity.csv",
+             ["DateUTC","Query","AttemptedQueries","SuccessfulQueries","FailedQueries","ErrorRatePct","MeasuredAt"],rows)
+    save_csv(output,"query_health.csv",
+             ["AttemptedQueries","SuccessfulQueries","FailedQueries","ErrorRatePct","Scope","MeasuredAt"],
+             [[*query_stats[:3],query_stats[4],"Pipeline SQL attempts since logging was installed",measured_at]])
+
     print("Monitoring files created:")
     print(output.resolve())
     print()
@@ -331,6 +352,9 @@ def export_monitoring():
     print("3. queries.csv")
     print("4. coverage.csv")
     print("5. database_sizes.csv")
+    print("6. batch_health.csv")
+    print("7. query_activity.csv")
+    print("8. query_health.csv")
     print()
     print("Import these files into Power BI.")
     print(

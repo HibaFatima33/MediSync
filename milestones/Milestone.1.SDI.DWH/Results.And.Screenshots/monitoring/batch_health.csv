@@ -1,0 +1,2 @@
+﻿AttemptedRuns,SuccessfulRuns,FailedRuns,SuccessRatePct,Scope,MeasuredAt
+2,1,1,50.0,PostgreSQL ingestion attempts since logging was installed,2026-11-23T12:42:43+05:00

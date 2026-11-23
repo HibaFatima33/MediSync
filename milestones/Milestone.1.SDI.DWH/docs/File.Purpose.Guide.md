@@ -18,3 +18,4 @@
 | `sql/01_sales_by_medicine_month_channel_city.sql` | Summarize medicine sales by month, channel and city. |
 | `sql/02_hospital_forecast_consumption.sql` | Compare hospital forecasts with actual consumption and show unmet demand. |
 | `sql/03_sales_and_demand_side_by_side.sql` | Compare hospital pharmacy sales and hospital demand for the same medicine and month. |
+| 1 | `code/monitoring_events.py` | Record actual ingestion and SQL outcomes and calculate attempt-based monitoring summaries. |

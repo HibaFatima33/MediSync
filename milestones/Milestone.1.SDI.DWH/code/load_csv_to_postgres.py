@@ -20,7 +20,7 @@ def digest(path):
         return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
-def ingest(cfg, require_postgres=False):
+def _ingest(cfg, require_postgres=False):
     if require_postgres and not cfg["postgres_dsn"]:
         raise ValueError("PostgreSQL is required for this mode. Set postgres_dsn in config.json.")
     batch = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S") + "_" + uuid.uuid4().hex[:8]
@@ -96,3 +96,16 @@ def stage_postgres(folder, batch, dsn):
                         (batch_id TEXT PRIMARY KEY, loaded_at TIMESTAMPTZ DEFAULT now())""")
         conn.execute("INSERT INTO pharma_staging.batch_log(batch_id) VALUES (%s)", (batch,))
     return metrics
+
+
+def ingest(cfg, require_postgres=False):
+    from monitoring_events import record_event
+    start=time.perf_counter()
+    mode="postgres" if cfg.get("postgres_dsn") else "local_practice"
+    try:
+        snapshot=_ingest(cfg,require_postgres)
+    except Exception as exc:
+        record_event(cfg,"ingestion",False,time.perf_counter()-start,mode=mode,error_type=type(exc).__name__)
+        raise
+    record_event(cfg,"ingestion",True,time.perf_counter()-start,mode=mode,batch=Path(snapshot).name)
+    return snapshot

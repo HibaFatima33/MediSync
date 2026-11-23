@@ -1,0 +1,7 @@
+
+# Keep submitted documents and recordings binary.
+*.pdf binary
+*.xlsx binary
+*.docx binary
+*.pbix binary
+*.mp4 binary

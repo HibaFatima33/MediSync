@@ -13,7 +13,7 @@ from airflow.sdk import dag,task
 
 
 def call(endpoint,body):
-    url=os.environ.get("PHARMA_API_URL","http://127.0.0.1:8000")+endpoint
+    url=os.environ.get("PHARMA_API_URL","http://127.0.0.1:8765")+endpoint
     request=urllib.request.Request(url,json.dumps(body).encode(),{"Content-Type":"application/json"},method="POST")
     with urllib.request.urlopen(request,timeout=1800) as response:
         return json.load(response)
