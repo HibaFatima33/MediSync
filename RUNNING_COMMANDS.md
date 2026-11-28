@@ -1,36 +1,32 @@
-# Phase 1 running commands
+# Phase 1 Running Commands
 
-Use Windows PowerShell in the project root. Keep PostgreSQL running. The existing local folder is D:/IDA'26/Project Phase 1.
+Use **Windows PowerShell** from the project root. Keep PostgreSQL running.
 
 ```powershell
 cd "D:\IDA'26\Project Phase 1"
 ```
 
-## API and Airflow
+## M1: Run the DWH through the SQL query layer
 
-In PowerShell enter Ubuntu, then find the Windows gateway inside Ubuntu.
+### 1. Start the M1 API
+
+Open a PowerShell terminal and leave this running:
+
+```powershell
+.\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\start_query_layer_api.py --host 0.0.0.0 --port 8765
+```
+
+### 2. Start Airflow in Ubuntu
+
+Open a second PowerShell terminal and enter Ubuntu:
 
 ```powershell
 wsl -d Ubuntu
 ```
 
-```bash
-ip route show default | awk '{print $3}'
-```
-
-The previous address was 172.17.128.1. Replace it below if yours differs. In a separate Windows PowerShell tab start the current API.
-172.17.128.1
-```powershell
-.\.venv\Scripts\python.exe .\milestones\Milestone.2.SDI.DWH\code\start_dashboard_pipeline_api.py --host 172.17.128.1 --port 8765
-```
-
-Keep it open. In Ubuntu run the health check and start your existing Airflow environment.
+At the Ubuntu prompt, start Airflow:
 
 ```bash
-curl --max-time 10 http://172.17.128.1:8765/health
-then this 
-
-
 source /home/p/pharma-airflow/.venv/bin/activate
 export AIRFLOW_HOME=/home/p/airflow
 export AIRFLOW__CORE__LOAD_EXAMPLES=False
@@ -38,71 +34,154 @@ export PHARMA_API_URL=http://172.17.128.1:8765
 airflow standalone
 ```
 
-Open http://localhost:8080 and sign in. The DAG ID remains sales_demand_visuals so the same run history is available. Its source file now lives in Milestone 2. Copy it to the existing Airflow filename when needed, using a separate PowerShell tab.
+If `172.17.128.1` is not the current Windows gateway, check it from Ubuntu:
 
-```powershell
-wsl -d Ubuntu --exec mkdir -p /home/p/airflow/dags
-wsl -d Ubuntu --exec cp "/mnt/d/IDA'26/Project Phase 1/milestones/Milestone.2.SDI.DWH/airflow_dags/sdi_dashboard_refresh_dag.py" /home/p/airflow/dags/sales_demand_visuals.py
+```bash
+ip route show default
 ```
 
-The three task milestone DAG has ID pharma_phase1. To update that existing workflow use its Milestone 1 file.
+Use the gateway address shown after `via` in `PHARMA_API_URL` and in the API’s `--host` value.
 
-```powershell
-wsl -d Ubuntu --exec cp "/mnt/d/IDA'26/Project Phase 1/milestones/Milestone.1.SDI.DWH/airflow_dags/sdi_query_layer_dag.py" /home/p/airflow/dags/pharma_phase1.py
-```
+Open Airflow at [http://localhost:8080](http://localhost:8080). Find and trigger **`pharma_phase1`**. The M1 DAG has three tasks: ingest source data into PostgreSQL, validate/transform/load the warehouse, and run the three SQL questions.
 
-For the full demo, unpause sales_demand_visuals and Trigger once. For new data turn on Generate the next month in the Trigger form. Wait for five green tasks. The three task milestone workflow covers ingestion, loading and SQL. The full workflow includes optional next-month generation and dashboard generation. See milestones/Milestone.2.SDI.DWH/docs/Automated.Refresh.Guide.md.
+### 3. Show the M1 SQL results
 
-## Dashboard and SQL answers
-
-After a successful run use Windows PowerShell.
+After the Airflow run succeeds, open the results folder:
 
 ```powershell
 Start-Process .\Project.Data.And.Results\results
-Start-Process .\Project.Data.And.Results\results\dashboard.html
 ```
 
-For a manual dashboard rebuild after a direct query run use the Milestone 2 builder.
+The three SQL result files answer questions about monthly medicine sales, hospital forecast versus consumption, and sales compared with demand.
 
-```powershell
-.\.venv\Scripts\python.exe .\milestones\Milestone.2.SDI.DWH\code\build_business_dashboard.py
-```
+### 4. Run the M1 pipeline directly, if needed
 
-## Direct DWH run and SQL questions
-
-Run these only while Airflow is idle. A direct DWH run loads sources and creates query answers. Rebuild the dashboard separately if needed.
+Use this only while Airflow is idle:
 
 ```powershell
 .\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\run_dwh_pipeline.py --require-postgres
+```
+
+To rerun only the SQL questions:
+
+```powershell
 .\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\run_dwh_pipeline.py --queries-only
 ```
 
-## Fact counts
+## M2: Demonstrate the BI dashboard and two refreshes
+
+M2 uses the SDI warehouse and adds a Power BI business dashboard. Run the pipeline twice, then refresh Power BI after each completed run.
+
+### 1. Start the M2 API
+
+Open a PowerShell terminal and leave it running:
 
 ```powershell
-.\.venv\Scripts\python.exe -X utf8 -c "import duckdb; c=duckdb.connect('Project.Data.And.Results/data/sales_demand.duckdb', read_only=True); c.sql('SELECT COUNT(*) AS SalesRecords FROM FactPharmacySales').show(); c.sql('SELECT COUNT(*) AS DemandRecords FROM FactHospitalDemand').show()"
+.\.venv\Scripts\python.exe .\milestones\Milestone.2.SDI.DWH\code\start_dashboard_pipeline_api.py --host 0.0.0.0 --port 8765
 ```
 
-The final counts from the two completed batches are 502000 sales and 28728 demand records.
+If you use a different Windows gateway address, replace `0.0.0.0` with the address Airflow can reach, and set the matching URL in Airflow’s `PHARMA_API_URL`.
 
-## Monitoring
+### 2. Start Airflow in Ubuntu
+
+Open a second PowerShell terminal:
+
+```powershell
+wsl -d Ubuntu
+```
+
+At the Ubuntu prompt:
+
+```bash
+source /home/p/pharma-airflow/.venv/bin/activate
+export AIRFLOW_HOME=/home/p/airflow
+export AIRFLOW__CORE__LOAD_EXAMPLES=False
+export PHARMA_API_URL=http://172.17.128.1:8765
+airflow standalone
+```
+
+Open [http://localhost:8080](http://localhost:8080). Find the **`sales_demand_visuals`** DAG and trigger it.
+
+For a refresh that adds a new demo month, turn on **Generate the next month** in the Airflow trigger form. Leave it off when you want to reload the current source files without generating new records.
+
+The current M2 DAG has four tasks:
+
+1. **Generate demo data** — creates another demo batch when the option is enabled; otherwise, it skips generation.
+2. **Ingest into PostgreSQL** — loads a snapshot of the source files into staging.
+3. **Validate, transform and load** — checks and prepares the data, then updates the DuckDB reporting tables.
+4. **Execute three questions** — runs the SQL queries that Power BI reads.
+
+Wait until all four tasks show success before continuing.
+
+### 3. Check the refreshed warehouse counts
+
+In a separate PowerShell terminal, run:
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 -c "import duckdb; c=duckdb.connect('Project.Data.And.Results/data/sales_demand.duckdb', read_only=True); c.sql('SELECT COUNT(*) AS SalesRecords FROM FactPharmacySales').show(); c.sql('SELECT COUNT(*) AS DemandRecords FROM FactHospitalDemand').show(); c.close()"
+```
+
+The refresh evidence you shared shows these counts:
+
+| Checkpoint | Sales records | Hospital demand records |
+|---|---:|---:|
+| Before the demo refreshes | 502,000 | 28,728 |
+| After refresh 1 | 503,000 | 29,484 |
+| After refresh 2 | 504,000 | 30,240 |
+
+Use the counts actually shown by your current DuckDB database when recording. Each refresh added 1,000 sales records and 756 demand records in the saved demo evidence.
+
+### 4. Refresh Power BI after each Airflow run
+
+Open the M2 Power BI file:
+
+```powershell
+Start-Process .\milestones\Milestone.2.SDI.DWH\bi_dashboard\Milestone.2.SDI.BI.Excel.pbix
+```
+
+In Power BI Desktop, choose **Home → Refresh**. Show the new period or changed values. Repeat after the second successful Airflow run.
+
+The dashboard pages are:
+
+- **Sales:** net sales, gross profit, packs sold, gross margin, monthly sales, sales by channel, top medicines and a drill-down table.
+- **Hospital Demand:** forecast packs, consumed packs, unmet demand, monthly forecast versus actual, unmet demand by hospital and a detail table.
+- **Sales Vs Demand:** hospital pharmacy sales beside hospital consumption, their comparison percentage, hospital comparisons and details. Sales and consumption are separate measures, so the page compares them rather than adding them together.
+
+### 5. Show M2 refresh evidence
+
+In Airflow, show the successful `sales_demand_visuals` run and its four tasks. Show the DuckDB counts, then show Power BI after **Home → Refresh**. Repeat for the second run.
+
+The saved report contains a screenshot of a five-task run from the recorded demonstration. Your current DAG has four tasks; explain the four current stages if you show a fresh run.
+
+## M1 pipeline-monitoring Power BI
+
+This is a separate technical monitoring dashboard, not the M2 business dashboard.
+
+Export the monitoring files:
 
 ```powershell
 .\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\export_pipeline_monitoring.py
+```
+
+Open the monitoring PBIX:
+
+```powershell
 Start-Process ".\Pipeline.Monitoring (Power BI)\MediSync.Pipeline.Monitoring.pbix"
 ```
 
-Power BI data sources now point to Project.Data.And.Results/results/monitoring. If the saved PBIX still points to its old location, use Transform data, Data source settings, Change Source for each of the five CSVs, then Refresh and save.
+It shows pipeline measurements such as rows processed, staging load time, reporting-table counts, SQL query time, and database storage. If the PBIX cannot find its monitoring CSVs, update its data sources in Power BI using **Transform data → Data source settings**, then refresh.
 
-## Watcher
+## M1 file watcher demonstration
 
-Keep the API and Airflow running and wait for any active load to finish. In Windows PowerShell terminal A start the WSL watcher using the moved config.
+The watcher detects a changed source file and asks Airflow to run. Keep the API and Airflow running, and make sure no pipeline run is active.
+
+In a Windows PowerShell terminal:
 
 ```powershell
 wsl -d Ubuntu --exec /home/p/pharma-airflow/.venv/bin/python "/mnt/d/IDA'26/Project Phase 1/milestones/Milestone.1.SDI.DWH/code/watch_csv_and_trigger_airflow.py" --config "/mnt/d/IDA'26/Project Phase 1/milestones/Milestone.1.SDI.DWH/config/config.json" --once
 ```
 
-After its waiting message, in PowerShell terminal B update only the sales file modification time.
+In another PowerShell terminal, update the sales source file’s modified time to demonstrate a file change:
 
 ```powershell
 $cfg = Get-Content .\milestones\Milestone.1.SDI.DWH\config\config.json -Raw | ConvertFrom-Json
@@ -112,30 +191,8 @@ $sales = Get-Item -LiteralPath (Join-Path $source "05_pharmacy_sales_data.csv")
 $sales.LastWriteTime = [datetime]::Now
 ```
 
-The watcher should request the run. Show its accepted request and the successful tasks. This test leaves row counts at their existing values.
+Show whether the watcher accepted the change and whether Airflow completed the resulting run.
 
-## Generator
+## Stop the services
 
-The existing demo already includes both refreshes. These commands document how new batches were created from an original baseline in a separate practice setup.
-
-```powershell
-.\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\generate_demo_records.py --prepare
-.\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\generate_demo_records.py --refresh 1
-.\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\generate_demo_records.py --refresh 2
-```
-
-Run Airflow after each generated batch. Completed refresh numbers are skipped. To test the moved generator without changing data use --help.
-
-## Checks
-
-```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s .\milestones\Milestone.1.SDI.DWH\tests -v
-```
-
-## Stop
-
-Wait for the current run to finish. Use Ctrl+C in the API, watcher and Airflow terminals when finished.
-
-## New automated generation
-
-The DAG now has five tasks. Restart the API and copy the updated DAG before using /generate. In Trigger turn on Generate the next month to add the next batch. Leave it off for an unchanged-data or watcher run. March and April 2026 are the next two periods after the completed January and February batches. 
+Wait for any active run to finish. Press **Ctrl+C** in the API and Airflow terminals when you are done. If the watcher is running continuously, stop it with **Ctrl+C** too.
