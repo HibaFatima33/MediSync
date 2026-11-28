@@ -1,6 +1,6 @@
-# MediSync
+# MediSync — Sales and Demand Intelligence
 
-A medicine sales and hospital demand reporting project using Python, PostgreSQL, DuckDB, SQL and Apache Airflow.
+MediSync combines medicine sales and hospital demand data for reporting. The project uses Python, PostgreSQL, DuckDB, SQL, Apache Airflow and Power BI.
 
 ## Group Members
 
@@ -11,26 +11,34 @@ A medicine sales and hospital demand reporting project using Python, PostgreSQL,
 
 ## Phase 1: Sales and Demand Intelligence
 
-We prepare separate medicine sales and hospital demand records so they can be studied together.
+### Milestone 1: Data Warehouse and SQL
 
-### Milestone 1
+Milestone 1 builds the reporting warehouse through the SQL query layer.
 
-Our implementation includes:
+- PostgreSQL stores incoming records in staging.
+- Python validates and prepares the data.
+- DuckDB stores seven dimensions and two fact tables.
+- Three SQL queries answer sales and hospital-demand questions.
+- The `pharma_phase1` Airflow DAG runs ingestion, warehouse loading and the SQL queries.
+- A Power BI monitoring report shows pipeline measurements.
+- The submission includes the prepared data snapshot and its data dictionary.
 
-- PostgreSQL staging tables.
-- Data validation and transformation using Python.
-- Seven dimension tables and two fact tables in DuckDB.
-- Three SQL questions and their results.
-- Airflow workflow through the query layer.
-- Power BI monitoring of record counts, loading times, query times and storage.
-- Oversampled data and a data dictionary.
+See the [Milestone 1 folder](milestones/Milestone.1.SDI.DWH/) for the report, Excel workbook, code, data and evidence.
 
-The submission files are in [Milestone 1](milestones/Milestone.1.SDI.DWH/).
+**Milestone 1 video:** [Watch the recording](milestones/Milestone.1.SDI.DWH/video/Milestone.1.SDI.DWH.Video.mp4).
 
-The folder includes our report, Excel workbook, code, data and supporting screenshots.
+### Milestone 2: Business Intelligence and Refreshing
 
-**Demo video:** Will be uploaded shortly.
+Milestone 2 adds a Power BI business dashboard with Sales, Hospital Demand and Sales Vs Demand pages. Filters and detail tables help users investigate changes in sales and hospital demand.
 
-## Running the Project
+The `sales_demand_visuals` Airflow DAG runs four tasks: optional demo-data generation, PostgreSQL ingestion, validation and DuckDB loading, and the three SQL queries. After the DAG succeeds, refresh the Power BI report separately in Power BI Desktop using **Home → Refresh**.
 
-See [Running Commands](RUNNING_COMMANDS.md) for setup and execution instructions.
+The two demonstrated refreshes increased the DuckDB totals from 502,000 sales and 28,728 demand rows to 503,000 and 29,484, then to 504,000 and 30,240.
+
+See the [Milestone 2 folder](milestones/Milestone.2.SDI.DWH/) for the report, Power BI file, Airflow code, refresh evidence and video.
+
+**Milestone 2 video:** [Watch the recording](milestones/Milestone.2.SDI.DWH/video/Milestone.2.SDI.DWH.Video.mp4).
+
+## Run the Project
+
+See [RUNNING_COMMANDS.md](RUNNING_COMMANDS.md) for setup and execution instructions.
