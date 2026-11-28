@@ -80,7 +80,7 @@ The submitted snapshot contains:
 
 We created sample records for January and February 2026 using existing record templates, new IDs and new dates. Each batch adds 1,000 sales and 756 hospital demand records. These are synthetic demonstration records, not newly collected real business records. Earlier records are retained.
 
-The `oversampled_data` folder contains the submitted data, generation notes and a dictionary explaining all 120 source columns. Sales are split into CSV parts for GitHub. The restore script joins these parts and checks the supplied files. Records in `generated_only` are already included in the full snapshot and must not be added again.
+The `oversampled_data` folder contains the submitted data, generation notes and a dictionary explaining all 120 source columns. Sales are split into CSV parts for GitHub. The restore script joins these parts and checks the supplied files. The folder structure separates the complete source snapshot, generated demo rows for inspection, and refresh history. The generated demo rows are already included in the complete snapshot and must not be added again. See `oversampled_data/README.md` for the folder map and restore instructions.
 
 ## Data engineering dashboard
 
@@ -144,3 +144,4 @@ Local inputs and the DuckDB database are stored in `Project.Data.And.Results/dat
 The Milestone 1 API is `milestones/Milestone.1.SDI.DWH/code/start_query_layer_api.py`. Its connection address must match the `PHARMA_API_URL` used by Airflow. See the running guide for the environment setup; its dashboard commands are additional work outside this Milestone 1 summary.
 
 For file descriptions, see `milestones/Milestone.1.SDI.DWH/docs/File.Purpose.Guide.md`.
+

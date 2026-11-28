@@ -69,7 +69,7 @@ def restore(destination):
         for dataset in manifest['datasets']:
             shutil.move(str(staging / dataset['filename']), str(destination / dataset['filename']))
         for filename in ['refresh_1_method.json', 'refresh_2_method.json', 'demo_state.json']:
-            shutil.copyfile(source / 'generation' / filename, destination / filename)
+            shutil.copyfile(source / 'refresh_history' / filename, destination / filename)
     print('Restored source folder:', destination)
     print('Set source_folder in your private config.json to this folder.')
 
@@ -78,3 +78,4 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--destination', type=Path, default=ROOT / 'Project.Data.And.Results' / 'data' / 'demo_source')
     restore(parser.parse_args().destination)
+

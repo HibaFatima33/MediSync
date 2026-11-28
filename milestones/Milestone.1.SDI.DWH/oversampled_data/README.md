@@ -1,15 +1,52 @@
-# Oversampled SDI data
+# Oversampled SDI source data
 
-This folder contains the complete final source snapshot and a separate copy of only the generated rows. The added rows extend time coverage into January and February 2026. The method uses existing row templates and new IDs and dates. Each new month adds 1,000 sales and 756 hospital demand records. The medicine master remains at 63 medicines.
+## What “oversampled” means here
 
-| Dataset | Original rows | Added rows | Final rows |
+We kept the original SDI records and added synthetic demonstration records for January and February 2026. We did this to extend the data over more months so the warehouse queries and refresh demonstration have new periods to show. This is a synthetic time extension; it is not a statistical class-balancing method. The medicine master was not expanded.
+
+## Record counts
+
+| Dataset | Original rows | Added synthetic rows | Complete snapshot rows |
 | --- | ---: | ---: | ---: |
 | Medicine master | 63 | 0 | 63 |
-| Pharmacy sales | 500000 | 2000 | 502000 |
-| Hospital demand | 27216 | 1512 | 28728 |
+| Pharmacy sales | 500,000 | 2,000 | 502,000 |
+| Hospital demand | 27,216 | 1,512 | 28,728 |
 
-The full sales snapshot is split into ordered parts of at most 50,000 rows so each CSV stays below GitHub's single-file limit. Read the parts in manifest order. Each part has the same header. The demand and master CSVs are stored as single files. generated_only repeats only the synthetic rows for inspection. Do not append generated_only to the complete snapshot because those rows are already included.
+Each generated month adds 1,000 sales rows and 756 hospital-demand rows. Existing records are retained.
 
-Milestone.1.SDI.DWH.Data.Dictionary.csv explains every source column, its type, units, a real example and the generation rule. manifest.json records expected counts and SHA256 hashes for checking the parts. generation contains the two recorded generation methods and completed refresh numbers. Reference fields and hospital context are reused from the original templates. The scope is the three selected SDI sources.
+## Folder contents
 
-Run python restore_submission_data.py from the project root to rebuild the pipeline input CSVs in data/demo_source. This command verifies checksums, headers, row counts and a content hash before publishing the reconstructed files. It requires a destination with no existing source CSVs. Existing project users already have the full files in data/demo_source and can keep using those.
+```text
+oversampled_data/
+  README.md
+  manifest.json
+  Milestone.1.SDI.DWH.Data.Dictionary.csv
+  complete_snapshot/
+    01_master_data.csv
+    06_hospital_demand_data.csv
+    sales_parts/                 11 ordered pieces of the complete sales file
+      part-001.csv
+      ...
+      part-011.csv
+  generated_demo_rows/           Only the synthetic rows, for inspection
+    05_pharmacy_sales_data.csv
+    06_hospital_demand_data.csv
+  refresh_history/               Notes about the two included demo refreshes
+    demo_state.json
+    refresh_1_method.json
+    refresh_2_method.json
+```
+
+The full sales snapshot is divided into 11 CSV pieces so each file stays within GitHub’s file-size limit. `manifest.json` lists their correct order, row counts and SHA-256 checksums. The restore script joins the pieces and verifies the reconstructed files.
+
+`generated_demo_rows` is a separate inspection copy. Those rows are already included in `complete_snapshot`; do not append them again. The data dictionary explains the source columns, types, units, examples and generation rules.
+
+## Restore the source files
+
+From the project root, run:
+
+```powershell
+.\.venv\Scripts\python.exe .\milestones\Milestone.1.SDI.DWH\code\restore_oversampled_data.py
+```
+
+The script rebuilds the three pipeline input CSVs under `Project.Data.And.Results/data/demo_source`. It requires that destination not already contain those CSVs.
